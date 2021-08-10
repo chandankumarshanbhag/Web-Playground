@@ -1,11 +1,12 @@
-import MonacoEditor from "@monaco-editor/react";
+import MonacoEditor, { Monaco } from "@monaco-editor/react";
 import { Tab, Tabs } from "baseui/tabs-motion";
 import React from "react";
 import usePlayground from "../../provider/playground_provider";
+import { Spinner } from "baseui/spinner";
 
 export default function Editor() {
     const [activeKey, setActiveKey] = React.useState("0");
-    const { setHtml, setJavaScript, setCss, } = usePlayground();
+    const { setHtml, setJavaScript, setCss, html, javaScript, css, } = usePlayground();
     return (
         <div>
             <Tabs
@@ -15,6 +16,7 @@ export default function Editor() {
                 }}
                 renderAll
                 fill
+
             >
                 <Tab title="HTML" overrides={{
                     TabPanel: {
@@ -26,10 +28,11 @@ export default function Editor() {
                     <MonacoEditor
                         height="80vh"
                         language="html"
-                        defaultValue="<!-- Write HTML code here -->"
                         onChange={(value) => {
                             setHtml(value);
                         }}
+                        loading={<Spinner />}
+                        value={html}
                     />
                 </Tab>
                 <Tab title="JavaScript" overrides={{
@@ -42,7 +45,7 @@ export default function Editor() {
                     <MonacoEditor
                         height="80vh"
                         language="javascript"
-                        defaultValue="// some comment"
+                        value={javaScript}
                         onChange={(value) => {
                             setJavaScript(value);
                         }}
@@ -58,6 +61,7 @@ export default function Editor() {
                     <MonacoEditor
                         height="80vh"
                         language="css"
+                        value={css}
                         onChange={(value) => {
                             setCss(value);
                         }}

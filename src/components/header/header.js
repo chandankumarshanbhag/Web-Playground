@@ -1,16 +1,21 @@
+import { useStyletron } from "baseui";
 import {
     AppNavBar,
-    setItemActive,
-
+    setItemActive
 } from "baseui/app-nav-bar";
 import {
     ChevronDown,
     Delete, Grab,
     Upload
 } from "baseui/icon";
+import { Select } from "baseui/select";
 import * as React from "react";
+import example from "../../example";
+import usePlayground from "../../provider/playground_provider";
 
 export default function Header() {
+    const { exampleSelected, setExampleSelected, setExample } = usePlayground()
+    const [css] = useStyletron();
     const [mainItems, setMainItems] = React.useState([
         { icon: Upload, label: "Main A" },
         {
@@ -33,6 +38,35 @@ export default function Header() {
             onMainItemSelect={item => {
                 setMainItems(prev => setItemActive(prev, item));
             }}
+            mainItems={[
+                {
+                    label: "option",
+                    children: <Select
+                        options={example.map((x, i) => ({ label: x.name, id: i }))}
+                        value={exampleSelected}
+                        onChange={({ value }) => {
+                            console.log(value)
+                            setExampleSelected(value);
+                            setExample(value[0].id);
+                        }}
+                        multi={false}
+                        clearable={false}
+                        placeholder="Select example"
+                        overrides={{
+                            Root: {
+                                style: ({ $theme }) => ({
+                                    minWidth: '220px'
+                                }),
+                            }
+                        }}
+                    />
+                }
+            ]}
+            mapItemToNode={item => (
+                <div>
+                    {item.children}
+                </div>
+            )}
 
             username="Guest"
             usernameSubtitle=""

@@ -1,7 +1,7 @@
 
 
 import { Cell, Grid } from 'baseui/layout-grid';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, createRef } from "react";
 import Footer from "./components/footer/footer";
 import Header from "./components/header/header";
 import Editor from "./components/editor/editor"
@@ -9,6 +9,8 @@ import { margin } from 'polished';
 import Preview from './components/preview/preview';
 import { PlaygroundProvider } from './provider/playground_provider';
 
+const leftPaneRef = createRef();
+const previewRef = createRef();
 
 function App() {
   const [dragging, setDragging] = useState(false);
@@ -23,6 +25,7 @@ function App() {
   const onMouseMove = (e) => {
     if (dragging) {
       let width = e.screenX - (e.screenX - e.clientX);
+      // leftPaneRef.current.style.width = width + "px";
       setLeftWidth(width < 260 ? 260 : width);
     }
   };
@@ -33,25 +36,26 @@ function App() {
 
 
   useEffect(() => {
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-    document.addEventListener('mouseleave', onMouseUp);
-    // document.addEventListener('mousedown', onMouseDown);
+    window.addEventListener('mousemove', onMouseMove);
+    window.addEventListener('mouseup', onMouseUp);
+    window.addEventListener('mouseleave', onMouseUp);
+    // window.addEventListener('mousedown', onMouseDown);
 
     return () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mouseleave', onMouseUp);
-      // document.removeEventListener('mousedown', onMouseDown);
+      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener('mouseup', onMouseUp);
+      window.removeEventListener('mouseleave', onMouseUp);
+      // window.removeEventListener('mousedown', onMouseDown);
     };
   });
+
 
   return (
     <div>
       <PlaygroundProvider>
         <Header />
         <div style={{ display: "flex", flexDirection: "row", alignItems: "stretch" }}>
-          <div style={{ width: leftWidth }}>
+          <div ref={leftPaneRef} style={{width: leftWidth}}>
             <Editor />
           </div>
           <div id="divider" style={{
@@ -63,7 +67,7 @@ function App() {
             borderRadius: "1px",
           }} onMouseDown={onMouseDown} />
           <div style={{ flex: 1, width: "100%", position: "relative" }}>
-            <Preview />
+            <Preview iframeRef={previewRef} />
           </div>
         </div>
       </PlaygroundProvider>
