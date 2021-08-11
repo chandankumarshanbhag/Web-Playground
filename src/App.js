@@ -14,7 +14,7 @@ const previewRef = createRef();
 
 function App() {
   const [dragging, setDragging] = useState(false);
-  const [leftWidth, setLeftWidth] = useState("45vw");
+  const [leftWidth, setLeftWidth] = useState("35vw");
 
   const onMouseDown = (e) => {
     if (e.target.id = "divider") {
@@ -55,7 +55,7 @@ function App() {
       <PlaygroundProvider>
         <Header />
         <div style={{ display: "flex", flexDirection: "row", alignItems: "stretch" }}>
-          <div ref={leftPaneRef} style={{width: leftWidth}}>
+          <div ref={leftPaneRef} style={{ width: leftWidth }}>
             <Editor />
           </div>
           <div id="divider" style={{
